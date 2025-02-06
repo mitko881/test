@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>WP Exam</title>
+</head>
+<body>
+<!-- The form should submit to ReservationsController.create or ReservationsController.update,
+     depending on whether we are creating or editing a reservation -->
+<form th:action="@{${reservation != null} ? '/reservations/' + ${reservation.id} : '/reservations'}" method="POST">
+    <div>
+        <label for="guestName">Guest Name</label>
+        <input type="text"
+               id="guestName"
+               name="guestName"
+               th:value="(${reservation} != null ? ${reservation.getGuestName()} : '')"
+               required>
+    </div>
+    <div>
+        <label for="dateCreated">Date of Creation</label>
+        <input type="date"
+               id="dateCreated"
+               name="dateCreated"
+               th:value="(${reservation} != null ? ${reservation.getDateCreated()} : '')"
+               required>
+    </div>
+    <div>
+        <label for="daysOfStay">Days of Stay</label>
+        <input type="number"
+               id="daysOfStay"
+               name="daysOfStay"
+               th:value="(${reservation} != null ? ${reservation.getDaysOfStay()} : '')"
+               required>
+    </div>
+    <div>
+        <label for="roomType">Room Type</label><br/>
+        <select id="roomType" name="roomType" multiple="multiple" size="5">
+            <!-- For each RoomType you should have one <option> like below  -->
+<!--            <option>[roomType]</option>-->
+            <option th:if="${reservation} != null"
+                    th:selected="${reservation.getRoomType() != null &&
+                                reservation.getRoomType().name() == room.name()}"
+                    th:each="room : ${roomTypes}"
+                    th:value="${room.name()}"
+                    th:text="${room.name()}">
+            </option>
+            <option th:if="${reservation} == null"
+                    th:each="room : ${roomTypes}"
+                    th:value="${room.name()}"
+                    th:text="${room.name()}">
+            </option>
+
+        </select>
+    </div>
+    <div>
+        <label>Hotel</label><br/>
+        <select id="hotel" name="hotelId" multiple="multiple" size="5">
+            <!-- For each hotel you should have one <option> like below  -->
+<!--            <option>[hotel.name]</option>-->
+            <option th:if="${reservation} != null"
+                    th:selected="${reservation.getHotel() != null &&
+                                reservation.getHotel().getId() == hotel.getId()}"
+                    th:each="hotel : ${hotels}"
+                    th:value="${hotel.getId()}"
+                    th:text="${hotel.getName()}">
+            </option>
+            <option th:if="${reservation} == null"
+                    th:each="hotel : ${hotels}"
+                    th:value="${hotel.getId()}"
+                    th:text="${hotel.getName()}">
+            </option>
+        </select>
+    </div>
+
+    <button id="submit" type="submit">Submit</button>
+    <a id="back" href="/reservations" type="button" class="btn btn-primary">Back to reservations</a>
+</form>
+
+<div>
+    <ul id="nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+</div>
+
+</body>
+</html>
